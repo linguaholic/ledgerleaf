@@ -1,0 +1,15 @@
+:root { --leaf: #2f7d4f; --ink: #1d2a24; --paper: #f7faf6; --line: #d9e4dc; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 17px/1.6 system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+header, main, footer { max-width: 860px; margin: 0 auto; padding: 16px; }
+header { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+header .brand { font-weight: 700; color: var(--leaf); text-decoration: none; font-size: 1.2rem; }
+nav a { color: var(--ink); margin-right: 14px; }
+h1 { line-height: 1.2; }
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.plan { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+.price { font-size: 2rem; font-weight: 700; color: var(--leaf); margin: 4px 0; }
+.price span { font-size: 1rem; color: var(--ink); font-weight: 400; }
+table { border-collapse: collapse; width: 100%; background: #fff; }
+th, td { border: 1px solid var(--line); padding: 8px; text-align: left; }
+footer { color: #5b6b62; font-size: 0.9rem; border-top: 1px solid var(--line); }

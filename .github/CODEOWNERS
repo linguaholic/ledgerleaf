@@ -1,0 +1,3 @@
+# Every file needs approval from its code owner before merging to main.
+# In a company this would be teams, e.g. /site/ @org/seo-team and /checks/ @org/web-platform.
+*  @linguaholic

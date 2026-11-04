@@ -1,0 +1,46 @@
+# Quality agent, part 1: deterministic SEO checks on every pull request.
+# The job name "seo-checks" is a required status check on main:
+# a pull request cannot be merged until it is green.
+name: Quality checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:   # run by hand from the Actions tab to check the whole site
+
+permissions:
+  contents: read
+
+jobs:
+  seo-checks:
+    name: seo-checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history, so we can diff against main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Branch name follows feat/... or fix/...
+        if: github.event_name == 'pull_request'
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          if [[ ! "$BRANCH" =~ ^(feat|fix)/[a-z0-9._-]+$ ]]; then
+            echo "::error title=Branch name::'$BRANCH' must look like feat/short-name or fix/short-name"
+            exit 1
+          fi
+
+      - name: Run SEO checks on changed pages
+        if: github.event_name == 'pull_request'
+        run: |
+          CHANGED=$(git diff --name-only --diff-filter=ACMR "origin/${{ github.base_ref }}...HEAD" -- 'site/*.html')
+          echo "Changed pages:"; echo "${CHANGED:-  (none)}"
+          python3 checks/seo_checks.py $CHANGED --changed-only
+
+      - name: Run SEO checks on the whole site
+        if: github.event_name == 'workflow_dispatch'
+        run: python3 checks/seo_checks.py
